@@ -9,14 +9,14 @@ test("detects horizontal matches", () => {
   const board = boardFrom(["AAABCDEF","BCDEFABC","CDEFABCD","DEFABCDE","EFABCDEF","FABCDEFA","ABCDEFAB","BCDEFABC"]);
   const result = findMatches(board);
   assert.ok(result.runs.some(run => run.axis === "horizontal"));
-  assert.ok(result.runs.some(run => run.axis === "vertical" && run.cells.some(([r,c]) => c === 0)));
+  assert.equal(result.cells.length, 3);
 });
 
 test("detects vertical matches", () => {
   const board = boardFrom(["ABCDEFGH","ACDEFGHB","ADEFGHBC","BEFGHACD","CFGHABDE","DFGHABEC","EFGHABCD","FGHABCDE"]);
   const result = findMatches(board);
   assert.ok(result.runs.some(run => run.axis === "vertical"));
-  assert.equal(result.cells.length, 3);
+  assert.ok(result.runs.some(run => run.axis === "vertical" && run.cells.some(([r,c]) => c === 0)));
 });
 
 test("rejects non-adjacent swaps and preserves board on invalid swap", () => {

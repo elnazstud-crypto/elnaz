@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#11152e"><title>Gem Quest | افسانه‌ی گوهرها</title>
+<link rel="stylesheet" href="styles/game.css">
+</head>
+<body>
+<main class="app-shell">
+  <header class="topbar">
+    <button class="icon-button" id="soundToggle" aria-label="تغییر صدا">♫</button>
+    <div class="brand"><span class="brand-mark">✦</span><div><strong>GEM QUEST</strong><small>افسانه‌ی گوهرها</small></div></div>
+    <button class="icon-button" id="restartButton" aria-label="شروع دوباره">↻</button>
+  </header>
+  <section class="world-banner">
+    <div class="world-copy"><span class="eyebrow">فصل اول · جنگل زمردی</span><h1>دروازه‌ی جنگل</h1><p>گوهرها را کنار هم بچین و دروازه‌ی جادویی را بیدار کن.</p></div>
+    <div class="crystal-art" aria-hidden="true"><span>✧</span><b>◆</b><i>✦</i></div>
+  </section>
+  <section class="stats">
+    <div class="stat"><span>امتیاز</span><strong id="score">۰</strong></div>
+    <div class="target-stat"><span>هدف مرحله</span><strong id="target">۱۲۰۰</strong><div class="progress"><i id="progressBar"></i></div></div>
+    <div class="stat"><span>حرکت باقی‌مانده</span><strong id="moves">۲۵</strong></div>
+  </section>
+  <section class="board-wrap">
+    <div class="board-heading"><span>مرحله ۱</span><span class="hint" id="hint">سه گوهر هم‌رنگ را ردیف کن</span></div>
+    <div id="board" class="board" role="grid" aria-label="صفحه بازی گوهرها"></div>
+  </section>
+  <footer class="bottom-bar">
+    <button class="booster" id="shuffleButton"><span>⤨</span><small>آمیختن</small></button>
+    <div class="goal-chip"><span class="goal-gem">✦</span><span>دروازه را با امتیاز باز کن</span></div>
+    <button class="booster" id="pauseButton"><span>Ⅱ</span><small>مکث</small></button>
+  </footer>
+</main>
+<div class="modal hidden" id="modal"><div class="modal-card"><div class="modal-spark">✦</div><h2 id="modalTitle">آفرین!</h2><p id="modalText"></p><button id="modalAction" class="primary-button">ادامه</button></div></div>
+<script type="module" src="src/main.js"></script>
+</body></html>

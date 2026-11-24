@@ -75,15 +75,18 @@ async function onCell(r,c) {
   }
   busy=true; moves--; board=result.board; render(); audio(620,.08);
   await wait(130);
-  await settle();
+  if (result.matches.specialCombo) $("hint").textContent = "قدرت ویژه فعال شد!";
+  await settle(result.matches);
   busy=false; render(); checkEnd();
 }
-async function settle() {
+async function settle(initialMatches = null) {
   let safety=0;
+  let pending = initialMatches;
   while (safety++<20) {
-    const before=findMatches(board);
+    const before = pending || findMatches(board);
     if (!before.cells.length) break;
-    const resolution=resolveMatches(board);
+    const resolution=resolveMatches(board, Math.random, 20, pending);
+    pending = null;
     score += resolution.totalCleared * 60 + Math.max(0, resolution.waves - 1) * resolution.totalCleared * 15;
     board=resolution.board;
     render();

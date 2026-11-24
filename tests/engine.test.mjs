@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { findMatches, swapCells, hasLegalMove, applyGravity, resolveMatches, boardIsStable, specialForMatch } from "../src/engine.js";
+import { findMatches, swapCells, hasLegalMove, applyGravity, resolveMatches, boardIsStable, specialForMatch, GEM_TYPES } from "../src/engine.js";
 
 const boardFrom = rows => rows.map(row => row.split("").map(type => type === "." ? null : ({ type, special: null })));
 const sequenceRandom = () => { let n=0; return () => ((n++ * 0.61803398875) % 1); };
@@ -48,4 +48,26 @@ test("five-gem runs create a rainbow special", () => {
 test("legal move detection returns a boolean", () => {
   const board = boardFrom(["ABCDEFAB","BCDEFABC","CDEFABCD","DEFABCDE","EFABCDEF","FABCDEFA","ABCDEFAB","BCDEFABC"]);
   assert.equal(typeof hasLegalMove(board), "boolean");
+});
+
+test("four-gem runs create a horizontal rocket", () => {
+  assert.equal(specialForMatch({ cells: [[0,0],[0,1],[0,2],[0,3]], runs: [{ axis: "horizontal", length: 4 }] }), "rocket-h");
+});
+
+test("swapping a special gem activates it even without a normal match", () => {
+  const board = Array.from({ length: 8 }, (_, r) => Array.from({ length: 8 }, (_, c) => ({ type: GEM_TYPES[(r * 3 + c * 2) % GEM_TYPES.length], special: null })));
+  board[0][0].special = "bomb";
+  const swapped = swapCells(board, [0,0], [0,1]);
+  assert.equal(swapped.valid, true);
+  assert.equal(swapped.matches.specialCombo, true);
+  const result = resolveMatches(swapped.board, sequenceRandom(), 20, swapped.matches);
+  assert.ok(result.totalCleared >= 4);
+  assert.equal(result.waveDetails[0].specialCombo, true);
+});
+
+test("rocket special clears its complete row", () => {
+  const board = Array.from({ length: 8 }, (_, r) => Array.from({ length: 8 }, (_, c) => ({ type: GEM_TYPES[(r * 3 + c * 2) % GEM_TYPES.length], special: null })));
+  board[0][1].special = "rocket-h";
+  const result = resolveMatches(board, sequenceRandom(), 20, { cells: [[0,0],[0,1],[0,2]], runs: [] });
+  assert.ok(result.totalCleared >= 8);
 });

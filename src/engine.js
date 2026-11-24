@@ -74,7 +74,7 @@ export function swapCells(board, a, b) {
     return {
       board: next,
       valid: true,
-      matches: { cells: [[ar, ac], [br, bc]], runs: [], specialCombo: true, rainbowTarget: second?.type }
+      matches: { cells: [[ar, ac], [br, bc]], runs: [], specialCombo: true, rainbowTarget: first?.special === "rainbow" ? second?.type : second?.special === "rainbow" ? first?.type : second?.type }
     };
   }
   const matches = findMatches(next);
@@ -176,7 +176,7 @@ export function resolveMatches(board, random = Math.random, maxWaves = 20, initi
       }
     }
     totalCleared += expanded.length - (keep ? 1 : 0);
-    waveDetails.push({ matched: matches.cells.length, cleared: expanded.length - (keep ? 1 : 0), createdSpecial, specialCombo: !!matches.specialCombo });
+    waveDetails.push({ matched: matches.cells.length, cleared: expanded.length - (keep ? 1 : 0), createdSpecial, specialCombo: !!matches.specialCombo, affectedCells: expanded });
     current = applyGravity(current, random);
     waves++;
   }

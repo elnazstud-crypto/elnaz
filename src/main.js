@@ -12,6 +12,8 @@ let bestScore = 0;
 const SAVE_KEY = "gem-quest-save-v1";
 let soundOn = true;
 let audioContext = null;
+let musicTimer = null;
+let musicIndex = 0;
 const fa = value => new Intl.NumberFormat("fa-IR").format(value);
 
 function audio(freq=520, duration=.09, type="sine") {
@@ -27,7 +29,43 @@ function audio(freq=520, duration=.09, type="sine") {
     gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + duration);
     oscillator.connect(gain); gain.connect(audioContext.destination);
     oscillator.start(); oscillator.stop(audioContext.currentTime + duration + .02);
+    startMusic();
   } catch {}
+}
+function startMusic() {
+  if (musicTimer || !soundOn || !audioContext) return;
+  const melody = [261.63, 329.63, 392, 329.63, 293.66, 349.23, 440, 349.23];
+  musicTimer = window.setInterval(() => {
+    if (!soundOn || !audioContext) return;
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = melody[musicIndex++ % melody.length];
+      gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.018, audioContext.currentTime + .08);
+      gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + .52);
+      oscillator.connect(gain); gain.connect(audioContext.destination);
+      oscillator.start(); oscillator.stop(audioContext.currentTime + .55);
+    } catch {}
+  }, 620);
+}
+function spawnBurst(cells) {
+  for (const [r,c] of cells || []) {
+    const target = boardEl.children[r * 8 + c];
+    if (!target) continue;
+    const rect = target.getBoundingClientRect();
+    for (let i=0;i<4;i++) {
+      const particle = document.createElement("i");
+      particle.className = "particle";
+      particle.style.left = (rect.left + rect.width/2) + "px";
+      particle.style.top = (rect.top + rect.height/2) + "px";
+      particle.style.setProperty("--dx", (Math.random()*64-32) + "px");
+      particle.style.setProperty("--dy", (Math.random()*64-32) + "px");
+      document.body.append(particle);
+      window.setTimeout(() => particle.remove(), 650);
+    }
+  }
 }
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -111,6 +149,7 @@ async function settle(initialMatches = null) {
     if (!before.cells.length) break;
     const resolution=resolveMatches(board, Math.random, 20, pending);
     pending = null;
+    spawnBurst(resolution.waveDetails.flatMap(wave => wave.affectedCells || []));
     score += resolution.totalCleared * 60 + Math.max(0, resolution.waves - 1) * resolution.totalCleared * 15;
     board=resolution.board;
     render();

@@ -12,6 +12,10 @@ This repository contains the first playable game slice:
 - Web Audio feedback generated locally (no third-party audio assets)
 - Deterministic engine tests using Node's built-in test runner
 
+## Web preview
+
+To enable the hosted preview, open **Settings → Pages** in this repository and set the build source to **GitHub Actions**. The deployment workflow will publish the game after that setting is enabled.
+
 ## Run locally
 
 Open `index.html` in a modern browser, or serve the repository root with any static HTTP server.

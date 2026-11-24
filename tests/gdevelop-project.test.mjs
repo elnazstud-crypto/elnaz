@@ -9,8 +9,7 @@ test("GDevelop project is a portrait native project with one JavaScript scene", 
   assert.equal(project.properties.orientation, "portrait");
   assert.equal(project.properties.packageName, "com.gemquest.fantasyjewels");
   assert.equal(project.layouts.length, 1);
-  const events = project.layouts[0].events;
-  assert.ok(events.some(event => event.type === "BuiltinCommonInstructions::JsCode"));
+  assert.ok(project.layouts[0].events.some(event => event.type === "BuiltinCommonInstructions::JsCode"));
 });
 
 test("GDevelop scene embeds the same runtime source used by the web preview", async () => {
@@ -22,9 +21,11 @@ test("GDevelop scene embeds the same runtime source used by the web preview", as
 
 test("campaign runtime includes 10 stages, touch input and local progress", async () => {
   const runtime = await readFile(new URL("../src/gemquest-runtime.js", import.meta.url), "utf8");
-  assert.equal((runtime.match(/\[\s*"[^"]+","(?:امتیاز|زمرد|یاقوت|یخ|یاقوت کبود|کهربا|آمتیست|خورشید)",\d+/g) || []).length, 10);
+  const campaign = runtime.slice(runtime.indexOf("const LEVELS"), runtime.indexOf("const state"));
+  assert.equal((campaign.match(/\],\[/g) || []).length + 1, 10);
   assert.match(runtime, /pointerdown/);
   assert.match(runtime, /localStorage\.setItem/);
   assert.match(runtime, /rocket-h/);
   assert.match(runtime, /rainbow/);
+  assert.match(runtime, /boosterUses/);
 });

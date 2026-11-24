@@ -22,7 +22,7 @@ test("GDevelop scene embeds the same runtime source used by the web preview", as
 
 test("campaign runtime includes 10 stages, touch input and local progress", async () => {
   const runtime = await readFile(new URL("../src/gemquest-runtime.js", import.meta.url), "utf8");
-  assert.equal((runtime.match(/\["[^"]+","(?:امتیاز|زمرد|یاقوت|یخ|یاقوت کبود|کهربا|آمتیست|خورشید)",\d+/g) || []).length, 10);
+  assert.equal((runtime.match(/\[\s*"[^"]+","(?:امتیاز|زمرد|یاقوت|یخ|یاقوت کبود|کهربا|آمتیست|خورشید)",\d+/g) || []).length, 10);
   assert.match(runtime, /pointerdown/);
   assert.match(runtime, /localStorage\.setItem/);
   assert.match(runtime, /rocket-h/);

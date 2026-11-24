@@ -1,46 +1,45 @@
 # Gem Quest | افسانه‌ی گوهرها
 
-A Persian RTL fantasy Match-3 jewel puzzle game, designed for Android-first portrait play.
+A Persian RTL fantasy match-3 puzzle project for portrait mobile play.
 
-## Current playable slice
+## Rebuilt game experience
 
-- Responsive portrait 8×8 board with six original faceted SVG jewel assets.
-- Adjacent tap-to-swap input and horizontal/vertical match detection.
-- Invalid-move rejection, gravity, cascades and automatic shuffle when no legal move remains.
-- Special creation: four-match rockets, five-match rainbow gems and intersecting L/T bombs.
-- Special activation and adjacent special-gem combos.
-- Score, target, move counter, best score and browser local-save/resume.
-- Original particle bursts, gem entrance animation, synthesized sound effects and a light generated melody.
-- Persian RTL interface and first level configuration.
-- Automated engine tests and JavaScript syntax checks.
+The current campaign preview is served from `index.html` and `src/gemquest-runtime.js`:
 
-## Web preview
+- A fantasy level map with 10 campaign stages and saved unlock progress.
+- An 8×8 jewel board with six original faceted jewel types.
+- Adjacent swaps, match detection, gravity, cascades and legal-move recovery.
+- Special gems: rockets, bombs and rainbow gems.
+- Level objectives: score targets, collecting selected jewel colors and clearing ice overlays.
+- Animated jewel facets, glow, particles, HUD, Persian RTL text and touch controls.
+- Synthesized sound effects with an in-game mute state.
+- Local persistence for best score and unlocked stages.
+- Ads remain disabled.
 
-To enable the hosted preview, open **Settings → Pages** in this repository and set the build source to **GitHub Actions**. The deployment workflow will publish the game after that setting is enabled.
+## Native GDevelop project
 
-## Run locally
+Open `android-gdevelop/game.json` with GDevelop 5.6 or newer. It is a portrait GDevelop project with a native scene and a JavaScript event that embeds the same self-contained game runtime. The readable runtime source is `src/gemquest-runtime.js`.
 
-Serve the repository root with any static HTTP server, then open its local URL. For example:
+The GDevelop project is an integration candidate and still requires opening in the GDevelop editor, running its Preview, and exporting/testing on Android. The existence of the project file is not proof that APK/AAB builds have completed.
+
+## Run preview and tests
+
+Serve the repository root with a static server, then open the local URL:
+
 ```bash
 npx serve .
-```
-
-Run checks:
-```bash
 npm test
 ```
 
-## Architecture
+GitHub Pages preview: https://elnazstud-crypto.github.io/elnaz/
 
-- `src/engine.js`: pure Match-3 rules, special effects and board operations.
-- `src/main.js`: browser UI, input, particles, audio and local save.
-- `assets/gems/`: original vector jewel artwork.
-- `index.html` and `styles/game.css`: responsive Persian game shell.
-- `levels/level-01.json`: first level configuration.
-- `docs/GDEVELOP_INTEGRATION.md`: plan for moving the validated rules into the GDevelop Android runtime.
+## Release gate
 
-GDevelop remains the intended authoritative runtime for the Android release. **This repository currently contains a playable browser slice and tested rules engine, not a completed native GDevelop project and not an APK/AAB.** The multi-level campaign, map, blockers, full production animation/audio asset pack, Android packaging and device QA remain future milestones.
+Before calling this a production release, the project must pass:
+1. GDevelop editor open/preview without repair or runtime errors.
+2. Gameplay QA across all 10 stages, including special combinations and objective completion.
+3. Android APK and AAB export.
+4. Installation and touch/performance checks on physical Android devices.
+5. Save/resume, audio and offline behavior verification.
 
-## Asset and IP notes
-
-The jewel SVGs and game code are original project assets. No Candy Crush logos, characters, proprietary art or audio are used. The UI requests the Vazirmatn font from Google Fonts and falls back to system fonts if unavailable; include its license notice if later bundling the font locally.
+No APK or AAB is claimed as complete yet.

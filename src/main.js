@@ -42,9 +42,17 @@ function render() {
     if (gem) {
       const jewel = document.createElement("span");
       jewel.className = "gem " + gem.type + (gem.special ? " special" : "");
-      const glyph = document.createElement("em");
-      glyph.textContent = gem.special === "rainbow" ? "✹" : gem.special?.startsWith("rocket") ? "➤" : gem.special === "bomb" ? "✹" : gemGlyph[gem.type] || "✦";
-      jewel.append(glyph); cell.append(jewel);
+      const image = document.createElement("img");
+      image.src = `./assets/gems/${gem.type}.svg`;
+      image.alt = "";
+      image.draggable = false;
+      jewel.append(image);
+      if (gem.special) {
+        const glyph = document.createElement("em");
+        glyph.textContent = gem.special === "rainbow" ? "✹" : gem.special.startsWith("rocket") ? "➤" : "✹";
+        jewel.append(glyph);
+      }
+      cell.append(jewel);
     }
     cell.addEventListener("click", () => onCell(r,c));
     boardEl.append(cell);

@@ -43,3 +43,17 @@ Fantasy jewel garden, deep indigo and teal backdrop, gold highlights, luminous j
 ## Android release gate
 
 A release candidate is not complete until the GDevelop project opens without repair prompts, all core interactions work in preview, touch targets are comfortable, save/load is verified, performance is checked on a real Android device, and APK/AAB exports complete successfully.
+
+
+## Current browser-slice capabilities
+
+The shared rules engine currently handles adjacent swaps, match detection, gravity, cascades, legal-move checks, rocket/bomb/rainbow creation and activation. Adjacent special swaps are passed into the resolver as a special-combo wave. The browser slice persists the current board, moves and score with localStorage.
+
+## Remaining work before Android release
+
+- Build and validate the actual GDevelop project file and scene/event serialization.
+- Recreate the board and animations as GDevelop scene objects and tweens.
+- Implement chapter map, multiple level objectives, blockers, boosters and level progression.
+- Replace browser localStorage with GDevelop-supported persistent storage for Android.
+- Integrate licensed music/SFX files and production-grade particle effects.
+- Test on physical Android devices, then export and verify APK and AAB.

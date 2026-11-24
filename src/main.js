@@ -76,7 +76,7 @@ async function settle() {
     const before=findMatches(board);
     if (!before.cells.length) break;
     const resolution=resolveMatches(board);
-    score += resolution.totalCleared * 60 * Math.max(1,resolution.waves);
+    score += resolution.totalCleared * 60 + Math.max(0, resolution.waves - 1) * resolution.totalCleared * 15;
     board=resolution.board;
     render();
     audio(500 + Math.min(500,resolution.totalCleared*18),.14,"triangle");

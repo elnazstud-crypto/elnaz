@@ -1,6 +1,5 @@
 import { createBoard, swapCells, resolveMatches, hasLegalMove, findMatches, GEM_TYPES } from "./engine.js";
 
-const SIZE = 8;
 const TARGET = 1200;
 const $ = id => document.getElementById(id);
 const boardEl = $("board");
@@ -9,10 +8,11 @@ let selected = null;
 let busy = false;
 let score = 0;
 let moves = 25;
+let bestScore = 0;
+const SAVE_KEY = "gem-quest-save-v1";
 let soundOn = true;
 let audioContext = null;
 const fa = value => new Intl.NumberFormat("fa-IR").format(value);
-const gemGlyph = { ruby:"✦", sapphire:"✧", emerald:"❖", topaz:"✧", amethyst:"✦", sunstone:"✹" };
 
 function audio(freq=520, duration=.09, type="sine") {
   if (!soundOn) return;
@@ -30,6 +30,27 @@ function audio(freq=520, duration=.09, type="sine") {
   } catch {}
 }
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+function saveProgress() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ version: 1, board, score, moves, bestScore }));
+  } catch {}
+}
+function restoreProgress() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+    const validBoard = Array.isArray(saved?.board) && saved.board.length === 8 &&
+      saved.board.every(row => Array.isArray(row) && row.length === 8 &&
+        row.every(gem => gem === null || (GEM_TYPES.includes(gem.type) && (gem.special === null || ["bomb","rainbow","rocket-h","rocket-v"].includes(gem.special)))));
+    if (saved?.version === 1 && validBoard) {
+      board = saved.board;
+      score = Number.isFinite(saved.score) ? Math.max(0, saved.score) : 0;
+      moves = Number.isFinite(saved.moves) ? Math.max(0, Math.min(25, saved.moves)) : 25;
+      bestScore = Number.isFinite(saved.bestScore) ? Math.max(0, saved.bestScore) : 0;
+    }
+  } catch {}
+}
+restoreProgress();
 
 function render() {
   boardEl.innerHTML = "";
@@ -59,6 +80,9 @@ function render() {
   }));
   $("score").textContent = fa(score);
   $("moves").textContent = fa(moves);
+  bestScore = Math.max(bestScore, score);
+  $("bestScore").textContent = fa(bestScore);
+  saveProgress();
   $("progressBar").style.width = Math.min(100, score/TARGET*100) + "%";
 }
 function adjacent(a,b){return Math.abs(a[0]-b[0])+Math.abs(a[1]-b[1])===1;}

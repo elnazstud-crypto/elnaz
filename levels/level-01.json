@@ -1,0 +1,18 @@
+{
+  "id": "forest-gate-01",
+  "name": "دروازه جنگل",
+  "chapter": "جنگل زمردی",
+  "board": { "rows": 8, "columns": 8 },
+  "moves": 25,
+  "targetScore": 1200,
+  "objectives": [
+    { "type": "score", "target": 1200, "label": "امتیاز موردنیاز" }
+  ],
+  "availableGemTypes": ["ruby", "sapphire", "emerald", "topaz", "amethyst", "sunstone"],
+  "blockers": [],
+  "specialRules": {
+    "fourMatch": "rocket",
+    "fiveMatch": "rainbow",
+    "tOrLMatch": "bomb"
+  }
+}

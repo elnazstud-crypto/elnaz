@@ -5,6 +5,7 @@
   "description": "Persian fantasy Match-3 jewel puzzle game",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.mjs"
+    "check": "node --check src/main.js && node --check src/engine.js",
+    "test": "npm run check && node --test tests/*.test.mjs"
   }
 }

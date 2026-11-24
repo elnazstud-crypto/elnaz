@@ -13,7 +13,7 @@ test("detects horizontal matches", () => {
 });
 
 test("detects vertical matches", () => {
-  const board = boardFrom(["ABCDEFAB","ABCDEFBC","ABCDEFCD","DEFABCDE","EFABCDEF","FABCDEFA","ABCDEFAB","BCDEFABC"]);
+  const board = boardFrom(["ABCDEFGH","ACDEFGHB","ADEFGHBC","BEFGHACD","CFGHABDE","DFGHABEC","EFGHABCD","FGHABCDE"]);
   const result = findMatches(board);
   assert.ok(result.runs.some(run => run.axis === "vertical"));
   assert.equal(result.cells.length, 3);
